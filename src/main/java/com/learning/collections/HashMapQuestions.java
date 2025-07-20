@@ -1,203 +1,210 @@
 package com.learning.collections;
 
-import javax.swing.text.AsyncBoxView;
-import java.lang.reflect.AnnotatedArrayType;
 import java.util.*;
+import java.util.stream.Collectors;
 
+/**
+ * <h1>HashMap Questions - Modern Java 8+ Implementation</h1>
+ * This class demonstrates various employee data analysis operations using Java 8+ features
+ * including Streams, Lambda expressions, Method references, and Collectors.
+ * 
+ * @author Vishal Agarwal
+ * @version 2.0 - Modernized with Java 8+ features
+ * @date Updated for modern Java practices
+ */
 public class HashMapQuestions {
+    
+    private static final String SEPARATOR = "=====================================";
+    
     public static void main(String[] args) {
-        List<EmployeeHM> employeeList = new ArrayList<>();
-        employeeList.add(new EmployeeHM(111, "Jiya Brein", 32, "Female", "HR", 2011, 25000.0));
-        employeeList.add(new EmployeeHM(122, "Paul Niksui", 25, "Male", "Sales And Marketing", 2015, 13500.0));
-        employeeList.add(new EmployeeHM(133, "Martin Theron", 29, "Male", "Infrastructure", 2012, 18000.0));
-        employeeList.add(new EmployeeHM(144, "Murali Gowda", 28, "Male", "Product Development", 2014, 32500.0));
-        employeeList.add(new EmployeeHM(155, "Nima Roy", 27, "Female", "HR", 2013, 22700.0));
-        employeeList.add(new EmployeeHM(166, "Iqbal Hussain", 43, "Male", "Security And Transport", 2016, 10500.0));
-        employeeList.add(new EmployeeHM(177, "Manu Sharma", 35, "Male", "Account And Finance", 2010, 27000.0));
-        employeeList.add(new EmployeeHM(188, "Wang Liu", 31, "Male", "Product Development", 2015, 34500.0));
-        employeeList.add(new EmployeeHM(199, "Amelia Zoe", 24, "Female", "Sales And Marketing", 2016, 11500.0));
-        employeeList.add(new EmployeeHM(200, "Jaden Dough", 38, "Male", "Security And Transport", 2015, 11000.5));
-        employeeList.add(new EmployeeHM(211, "Jasna Kaur", 27, "Female", "Infrastructure", 2014, 15700.0));
-        employeeList.add(new EmployeeHM(222, "Nitin Joshi", 25, "Male", "Product Development", 2016, 28200.0));
-        employeeList.add(new EmployeeHM(233, "Jyothi Reddy", 27, "Female", "Account And Finance", 2013, 21300.0));
-        employeeList.add(new EmployeeHM(244, "Nicolus Den", 24, "Male", "Sales And Marketing", 2017, 10700.5));
-        employeeList.add(new EmployeeHM(255, "Ali Baig", 23, "Male", "Infrastructure", 2018, 12700.0));
-        employeeList.add(new EmployeeHM(266, "Sanvi Pandey", 26, "Female", "Product Development", 2015, 28900.0));
-        employeeList.add(new EmployeeHM(277, "Anuj Chettiar", 31, "Male", "Product Development", 2012, 35700.0));
-
-        getCountOfMaleAndFemaleEmployees(employeeList);
-        printDepartmentName(employeeList);
-        getAvgAgeOfMaleAndFemaleEmp(employeeList);
-        employeeJoiningAfter(employeeList, 2015);
-        findOldestEmployee(employeeList);
-        averageAndTotalSalary(employeeList);
-        findHighestExperiencedEmployee(employeeList);
-        getNumberOfEmployeeFromEachDepartment(employeeList);
-        getTotalSalaryForEachDepartment(employeeList);
+        List<EmployeeHM> employeeList = createEmployeeList();
+        
+        // Demonstrate all operations with modern Java 8+ approach
+        printResults("Male and Female Employee Count", () -> getCountOfMaleAndFemaleEmployees(employeeList));
+        printResults("Department Names", () -> printDepartmentNames(employeeList));
+        printResults("Average Age by Gender", () -> getAvgAgeOfMaleAndFemaleEmp(employeeList));
+        printResults("Employees Joining After 2015", () -> employeeJoiningAfter(employeeList, 2015));
+        printResults("Oldest Employee", () -> findOldestEmployee(employeeList));
+        printResults("Average and Total Salary", () -> averageAndTotalSalary(employeeList));
+        printResults("Highest Experienced Employee", () -> findHighestExperiencedEmployee(employeeList));
+        printResults("Employee Count by Department", () -> getNumberOfEmployeeFromEachDepartment(employeeList));
+        printResults("Total Salary by Department", () -> getTotalSalaryForEachDepartment(employeeList));
     }
-
-    public static void getCountOfMaleAndFemaleEmployees(List<EmployeeHM> list) {
-        int countMaleEmp = 0;
-        int countFemaleEmp = 0;
-        String gender = null;
-
-        for (int i = 0; i < list.size(); i++) {
-            gender = list.get(i).getGender();
-            if(gender.equalsIgnoreCase("Male")) {
-                countMaleEmp++;
-            } else {
-                countFemaleEmp++;
-            }
-        }
-
-        System.out.println("=====================================");
-        System.out.println("Male Emp : " + countMaleEmp + ", Female Emp : " + countFemaleEmp);
-        System.out.println("=====================================\n");
+    
+    /**
+     * Helper method to create employee list - extracted for better readability
+     */
+    private static List<EmployeeHM> createEmployeeList() {
+        return Arrays.asList(
+            new EmployeeHM(111, "Jiya Brein", 32, "Female", "HR", 2011, 25000.0),
+            new EmployeeHM(122, "Paul Niksui", 25, "Male", "Sales And Marketing", 2015, 13500.0),
+            new EmployeeHM(133, "Martin Theron", 29, "Male", "Infrastructure", 2012, 18000.0),
+            new EmployeeHM(144, "Murali Gowda", 28, "Male", "Product Development", 2014, 32500.0),
+            new EmployeeHM(155, "Nima Roy", 27, "Female", "HR", 2013, 22700.0),
+            new EmployeeHM(166, "Iqbal Hussain", 43, "Male", "Security And Transport", 2016, 10500.0),
+            new EmployeeHM(177, "Manu Sharma", 35, "Male", "Account And Finance", 2010, 27000.0),
+            new EmployeeHM(188, "Wang Liu", 31, "Male", "Product Development", 2015, 34500.0),
+            new EmployeeHM(199, "Amelia Zoe", 24, "Female", "Sales And Marketing", 2016, 11500.0),
+            new EmployeeHM(200, "Jaden Dough", 38, "Male", "Security And Transport", 2015, 11000.5),
+            new EmployeeHM(211, "Jasna Kaur", 27, "Female", "Infrastructure", 2014, 15700.0),
+            new EmployeeHM(222, "Nitin Joshi", 25, "Male", "Product Development", 2016, 28200.0),
+            new EmployeeHM(233, "Jyothi Reddy", 27, "Female", "Account And Finance", 2013, 21300.0),
+            new EmployeeHM(244, "Nicolus Den", 24, "Male", "Sales And Marketing", 2017, 10700.5),
+            new EmployeeHM(255, "Ali Baig", 23, "Male", "Infrastructure", 2018, 12700.0),
+            new EmployeeHM(266, "Sanvi Pandey", 26, "Female", "Product Development", 2015, 28900.0),
+            new EmployeeHM(277, "Anuj Chettiar", 31, "Male", "Product Development", 2012, 35700.0)
+        );
     }
-
-    public static void printDepartmentName(List<EmployeeHM> list) {
-        Set<String> set = new HashSet<>();
-        for (int i = 0; i < list.size(); i++) {
-            if(!set.contains(list.get(i).getDepartment())) {
-                set.add(list.get(i).getDepartment());
-            }
-        }
-
-        System.out.println("=====================================");
-        System.out.println(set);
-        System.out.println("=====================================\n");
+    
+    /**
+     * Helper method to format output consistently
+     */
+    private static void printResults(String title, Runnable operation) {
+        System.out.println(SEPARATOR);
+        System.out.println(title);
+        System.out.println(SEPARATOR);
+        operation.run();
+        System.out.println(SEPARATOR + "\n");
     }
-
-    public static void getAvgAgeOfMaleAndFemaleEmp(List<EmployeeHM> list) {
-        String gender = null;
-        int sumMaleEmp = 0;
-        int sumFemaleEmp = 0;
-        int countMaleEmp = 0;
-        int countFemaleEmp = 0;
-
-        for (int i = 0; i < list.size(); i++) {
-            gender = list.get(i).getGender();
-            if(gender.equalsIgnoreCase("Male")) {
-                sumMaleEmp += list.get(i).getAge();
-                countMaleEmp++;
-            } else {
-                sumFemaleEmp += list.get(i).getAge();
-                countFemaleEmp++;
-            }
-        }
-
-        System.out.println("=====================================");
-        System.out.println("Average age of Male Emp : " + sumMaleEmp/countMaleEmp);
-        System.out.println("Average age of Female Emp : " + sumFemaleEmp/countFemaleEmp);
-        System.out.println("=====================================\n");
+    
+    /**
+     * Count male and female employees using Streams and Collectors
+     * Time Complexity: O(n), Space Complexity: O(1)
+     */
+    public static void getCountOfMaleAndFemaleEmployees(List<EmployeeHM> employees) {
+        Map<String, Long> genderCount = employees.stream()
+            .collect(Collectors.groupingBy(
+                EmployeeHM::getGender, 
+                Collectors.counting()
+            ));
+        
+        System.out.printf("Male Employees: %d, Female Employees: %d%n", 
+            genderCount.getOrDefault("Male", 0L), 
+            genderCount.getOrDefault("Female", 0L));
     }
-
-    public static void employeeJoiningAfter(List<EmployeeHM> list, int year) {
-        System.out.println("=====================================");
-        for (int i = 0; i < list.size(); i++) {
-            if(list.get(i).getYearOfJoining() > year) {
-                System.out.println(list.get(i).getName());
-            }
-        }
-        System.out.println("=====================================\n");
+    
+    /**
+     * Get unique department names using Stream operations
+     * Time Complexity: O(n), Space Complexity: O(k) where k is number of unique departments
+     */
+    public static void printDepartmentNames(List<EmployeeHM> employees) {
+        Set<String> departments = employees.stream()
+            .map(EmployeeHM::getDepartment)
+            .collect(Collectors.toSet());
+        
+        System.out.println("Departments: " + departments);
     }
-
-    public static void findOldestEmployee(List<EmployeeHM> list) {
-        System.out.println("=====================================");
-
-        int maxAge = 0;
-        String nameOfEmp = null;
-        String deptName = null;
-
-        for (int i = 0; i < list.size(); i++) {
-            if(maxAge < list.get(i).getAge()) {
-                maxAge = list.get(i).getAge();
-                nameOfEmp = list.get(i).getName();
-                deptName = list.get(i).getDepartment();
-            }
-        }
-
-        System.out.println("Name of Emp : " + nameOfEmp + ", age : " + maxAge + ", dept : " + deptName);
-        System.out.println("=====================================\n");
+    
+    /**
+     * Calculate average age by gender using Streams and Collectors
+     * Time Complexity: O(n), Space Complexity: O(1)
+     */
+    public static void getAvgAgeOfMaleAndFemaleEmp(List<EmployeeHM> employees) {
+        Map<String, Double> avgAgeByGender = employees.stream()
+            .collect(Collectors.groupingBy(
+                EmployeeHM::getGender,
+                Collectors.averagingInt(EmployeeHM::getAge)
+            ));
+        
+        avgAgeByGender.forEach((gender, avgAge) -> 
+            System.out.printf("Average age of %s employees: %.2f%n", gender, avgAge));
     }
-
-    public static void averageAndTotalSalary(List<EmployeeHM> list) {
-        System.out.println("=====================================");
-
-        double sumOfSalary = 0;
-
-        for (int i = 0; i < list.size(); i++) {
-            sumOfSalary = sumOfSalary + list.get(i).getSalary();
-        }
-
-        System.out.println("Sum of salary : " + sumOfSalary);
-        System.out.println("Average salary : " + sumOfSalary/list.size());
-        System.out.println("=====================================\n");
+    
+    /**
+     * Find employees joining after specified year using Stream filter
+     * Time Complexity: O(n), Space Complexity: O(k) where k is number of matching employees
+     */
+    public static void employeeJoiningAfter(List<EmployeeHM> employees, int year) {
+        List<String> employeeNames = employees.stream()
+            .filter(emp -> emp.getYearOfJoining() > year)
+            .map(EmployeeHM::getName)
+            .collect(Collectors.toList());
+        
+        System.out.println("Employees joining after " + year + ":");
+        employeeNames.forEach(System.out::println);
     }
-
-    public static void findHighestExperiencedEmployee(List<EmployeeHM> list) {
-        System.out.println("=====================================");
-
-        int highestExpInYears = list.get(0).getYearOfJoining();
-        String name = null;
-
-        for (int i = 0; i < list.size(); i++) {
-            if(highestExpInYears >= list.get(i).getYearOfJoining()) {
-                highestExpInYears = list.get(i).getYearOfJoining();
-                name = list.get(i).getName();
-            }
-        }
-
-        System.out.println("Highest Exp Employee : " + name + ", Year of Joining : " + highestExpInYears);
-        System.out.println("=====================================\n");
+    
+    /**
+     * Find oldest employee using Stream max operation with Optional handling
+     * Time Complexity: O(n), Space Complexity: O(1)
+     */
+    public static void findOldestEmployee(List<EmployeeHM> employees) {
+        Optional<EmployeeHM> oldestEmployee = employees.stream()
+            .max(Comparator.comparingInt(EmployeeHM::getAge));
+        
+        oldestEmployee.ifPresentOrElse(
+            emp -> System.out.printf("Oldest Employee: %s, Age: %d, Department: %s%n", 
+                emp.getName(), emp.getAge(), emp.getDepartment()),
+            () -> System.out.println("No employees found")
+        );
     }
-
-    public static void getNumberOfEmployeeFromEachDepartment(List<EmployeeHM> list) {
-        System.out.println("=====================================");
-        Map<String, Integer> map = new HashMap<>();
-
-        for (int i = 0; i < list.size(); i++) {
-            if(map.containsKey(list.get(i).getDepartment())) {
-                map.put(list.get(i).getDepartment(), map.get(list.get(i).getDepartment()) + 1);
-            } else {
-                map.put(list.get(i).getDepartment(), 1);
-            }
-        }
-
-        Iterator<Map.Entry<String, Integer>> itr = map.entrySet().iterator();
-        while (itr.hasNext()) {
-            Map.Entry<String, Integer> entry = itr.next();
-            System.out.println("Department = " + entry.getKey() + ", No of employee = " + entry.getValue());
-        }
-        System.out.println("=====================================\n");
+    
+    /**
+     * Calculate average and total salary using Stream statistics
+     * Time Complexity: O(n), Space Complexity: O(1)
+     */
+    public static void averageAndTotalSalary(List<EmployeeHM> employees) {
+        DoubleSummaryStatistics salaryStats = employees.stream()
+            .mapToDouble(EmployeeHM::getSalary)
+            .summaryStatistics();
+        
+        System.out.printf("Total Salary: %.2f%n", salaryStats.getSum());
+        System.out.printf("Average Salary: %.2f%n", salaryStats.getAverage());
+        System.out.printf("Min Salary: %.2f%n", salaryStats.getMin());
+        System.out.printf("Max Salary: %.2f%n", salaryStats.getMax());
     }
-
-    public static void getTotalSalaryForEachDepartment(List<EmployeeHM> list) {
-        System.out.println("=====================================");
-        Map<String, Double> salaryMap = new HashMap<>();
-        Map<String, Integer> totalDeptEmpMap = new HashMap<>();
-        Map<String, String> mapForEmpNameInEachDept = new HashMap<>();
-
-        for (int i = 0; i < list.size(); i++) {
-            if(salaryMap.containsKey(list.get(i).getDepartment())) {
-                salaryMap.put(list.get(i).getDepartment(), salaryMap.get(list.get(i).getDepartment()) + list.get(i).getSalary());
-                totalDeptEmpMap.put(list.get(i).getDepartment(), totalDeptEmpMap.get(list.get(i).getDepartment()) + 1);
-                mapForEmpNameInEachDept.put(list.get(i).getDepartment(),
-                        mapForEmpNameInEachDept.get(list.get(i).getDepartment()) + ", " + list.get(i).getName());
-            } else {
-                salaryMap.put(list.get(i).getDepartment(), list.get(i).getSalary());
-                totalDeptEmpMap.put(list.get(i).getDepartment(), 1);
-                mapForEmpNameInEachDept.put(list.get(i).getDepartment(), list.get(i).getName());
-            }
-        }
-
-        Iterator<Map.Entry<String, Double>> itr = salaryMap.entrySet().iterator();
-        while (itr.hasNext()) {
-            Map.Entry<String, Double> entry = itr.next();
-            System.out.println("Department = " + entry.getKey() +
-                    ", Total Salary = " + entry.getValue()/totalDeptEmpMap.get(entry.getKey()) +
-                    ", Names of Employees = " + mapForEmpNameInEachDept.get(entry.getKey()));
-        }
-        System.out.println("=====================================\n");
+    
+    /**
+     * Find employee with highest experience (earliest joining year)
+     * Time Complexity: O(n), Space Complexity: O(1)
+     */
+    public static void findHighestExperiencedEmployee(List<EmployeeHM> employees) {
+        Optional<EmployeeHM> mostExperienced = employees.stream()
+            .min(Comparator.comparingInt(EmployeeHM::getYearOfJoining));
+        
+        mostExperienced.ifPresentOrElse(
+            emp -> {
+                int experience = 2024 - emp.getYearOfJoining(); // Current year - joining year
+                System.out.printf("Most Experienced Employee: %s, Experience: %d years, Department: %s%n", 
+                    emp.getName(), experience, emp.getDepartment());
+            },
+            () -> System.out.println("No employees found")
+        );
+    }
+    
+    /**
+     * Count employees in each department using grouping collector
+     * Time Complexity: O(n), Space Complexity: O(k) where k is number of departments
+     */
+    public static void getNumberOfEmployeeFromEachDepartment(List<EmployeeHM> employees) {
+        Map<String, Long> employeeCountByDept = employees.stream()
+            .collect(Collectors.groupingBy(
+                EmployeeHM::getDepartment,
+                Collectors.counting()
+            ));
+        
+        System.out.println("Employee count by department:");
+        employeeCountByDept.entrySet().stream()
+            .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
+            .forEach(entry -> System.out.printf("%s: %d employees%n", 
+                entry.getKey(), entry.getValue()));
+    }
+    
+    /**
+     * Calculate total salary for each department
+     * Time Complexity: O(n), Space Complexity: O(k) where k is number of departments
+     */
+    public static void getTotalSalaryForEachDepartment(List<EmployeeHM> employees) {
+        Map<String, Double> totalSalaryByDept = employees.stream()
+            .collect(Collectors.groupingBy(
+                EmployeeHM::getDepartment,
+                Collectors.summingDouble(EmployeeHM::getSalary)
+            ));
+        
+        System.out.println("Total salary by department:");
+        totalSalaryByDept.entrySet().stream()
+            .sorted(Map.Entry.<String, Double>comparingByValue().reversed())
+            .forEach(entry -> System.out.printf("%s: $%.2f%n", 
+                entry.getKey(), entry.getValue()));
     }
 }
